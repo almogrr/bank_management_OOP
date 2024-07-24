@@ -7,6 +7,7 @@ deletion, and transactions such as deposits, withdrawals, and transfers.
 
 import logging
 import sqlite3
+from enum import Enum
 from icecream import ic
 
 
@@ -17,9 +18,9 @@ logging.basicConfig(
     format='%(asctime)s - %(levelname)s - %(message)s'
 )
 
-class BankActions:
+class BankActions(Enum):
     """
-    Enum-like class for various bank actions.
+    Enum for various bank actions.
     """
     CREATE_ACCOUNT = 1
     CLOSE_ACCOUNT = 2
@@ -28,9 +29,9 @@ class BankActions:
     CLIENT_ACTIONS = 5
     EXIT = 6
 
-class ClientActions:
+class ClientActions(Enum):
     """
-    Enum-like class for various client actions.
+    Enum for various client actions.
     """
     WITHDRAW = 1
     DEPOSIT = 2
@@ -50,7 +51,7 @@ class Client:
         occupation (str): Occupation of the client.
         movements (list): List of movements for the client.
     """
-    def __init__(self, first_name, balance=0.0, occupation=None):
+    def __init__(self, id, first_name, balance=0.0, occupation=None):
         self.id = id
         self.first_name = first_name
         self.balance = balance
@@ -99,7 +100,7 @@ class Bank:
         Displays the main menu and returns the user's choice.
 
         Returns:
-            int: The user's menu choice.
+            BankActions: The user's menu choice.
         """
         print("1. Create Account")
         print("2. Close Account")
@@ -107,14 +108,15 @@ class Bank:
         print("4. Count Clients")
         print("5. Client Actions")
         print("6. Exit")
-        return int(input("Select an option: "))
+        choice = int(input("Select an option: "))
+        return BankActions(choice)
 
     def show_client_menu(self):
         """
         Displays the client actions menu and returns the user's choice.
 
         Returns:
-            int: The user's client action choice.
+            ClientActions: The user's client action choice.
         """
         print("1. Withdraw")
         print("2. Deposit")
@@ -122,7 +124,8 @@ class Bank:
         print("4. Check Balance")
         print("5. Show Movements")
         print("6. Exit")
-        return int(input("Select an action: "))
+        choice = int(input("Select an action: "))
+        return ClientActions(choice)
 
     def create_account(self, first_name, occupation=None):
         """
